@@ -1,3 +1,7 @@
+//Author: Bemnet Merkebu
+//EUID: 11602811
+//CSCE 3600
+
 // compile: gcc rec09svr.c -o rec09svr
 // usage  : ./rec09svr port
 
@@ -19,7 +23,7 @@ int main(int argc, char *argv[])
 
 	char sendBuff[1025];  
  
-	if ((listenfd = socket(  ?  )) == -1)
+	if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 	{
 		printf("socket error\n");
 		exit(EXIT_FAILURE);
@@ -33,14 +37,14 @@ int main(int argc, char *argv[])
 	portno = atoi(argv[1]);
 	serv_addr.sin_port = htons(portno);    
 
-	if (bind(  ?  ) == -1)
+	if (bind(listenfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) == -1)
 	{
 		printf("bind error\n");
 		exit(EXIT_FAILURE);
 	}
 
 
-	if (listen(  ?  ) == -1)
+	if (listen(listenfd, 10) == -1)
 	{
 		printf("listen error\n");
 		exit(EXIT_FAILURE);
@@ -49,7 +53,7 @@ int main(int argc, char *argv[])
 	while (1)
 	{
 		cli_size = sizeof(cli_addr);
-		if ((connfd = accept(  ?  )) == -1)
+		if ((connfd = accept(listenfd, (struct sockaddr*)&cli_addr, &cli_size)) == -1)
 		{
 			printf("accept error\n");
 			exit(EXIT_FAILURE);
